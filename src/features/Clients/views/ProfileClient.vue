@@ -24,11 +24,13 @@ const buyer = computed(() => ({
     cityEn: 'Cairo',
     cityAr: 'القاهرة',
     memberSince: '2023',
+    roleEn: 'Buyer',
+    roleAr: 'مشتري',
     isVerified: false, // غير محقق الهوية
     avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=400',
 }))
 
-const goBack = () => { router.back() }
+
 
 // القوائم الخاصة بالأمان
 const securityActions = computed(() => [
@@ -42,19 +44,9 @@ const securityActions = computed(() => [
     <div class="min-h-screen bg-[#F9FAFB] pb-20">
 
         <!-- Hero Section (Gradient Background instead of Image) -->
-        <section class="relative h-48 md:h-64 overflow-hidden bg-gradient-to-r from-primary to-blue-700">
-            <!-- الزخرفة الخلفية (اختياري) -->
+        <section class="relative h-48 md:h-64 overflow-hidden bg-linear-to-r from-primary to-blue-900">
             <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
-            
-            <button
-                @click="goBack"
-                class="absolute top-6 flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-md rounded-full text-white hover:bg-white/30 transition-all cursor-pointer z-10 text-sm font-medium"
-                :class="locale === 'ar' ? 'right-6 md:right-10' : 'left-6 md:left-10'"
-            >
-                <ArrowRight v-if="locale === 'ar'" class="w-4 h-4" />
-                <ArrowLeft v-else class="w-4 h-4" />
-                {{ t('buyerProfile.common.back') }}
-            </button>
+        
         </section>
 
         <!-- Profile Card & Layout -->
@@ -80,8 +72,10 @@ const securityActions = computed(() => [
                         {{ buyer.firstName }} {{ buyer.lastName }}
                     </h1>
                     <div class="flex items-center justify-center md:justify-start gap-2 text-sm text-gray-500">
+                        <span class="w-1 h-1 rounded-full bg-gray-300"></span>
                         <span>{{ t('buyerProfile.memberSince') }} {{ buyer.memberSince }}</span>
                         <span class="w-1 h-1 rounded-full bg-gray-300"></span>
+                        <span>{{ t('buyerProfile.role') }} {{ locale === 'ar' ? buyer.roleAr : buyer.roleEn }}</span>
                         <span class="flex items-center gap-1" :class="buyer.isVerified ? 'text-emerald-600' : 'text-amber-500'">
                             <ShieldCheck v-if="buyer.isVerified" class="w-4 h-4" />
                             <ShieldAlert v-else class="w-4 h-4" />
