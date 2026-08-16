@@ -2,16 +2,36 @@ import { createRouter, createWebHistory } from "vue-router";
 import Home from "../features/home/views/Home.vue";
 import Products from "../features/products/views/Products.vue";
 import ProductDetails from "../features/products/views/ProductDetails.vue";
+import CompareProperties from "../features/products/views/CompareProperties.vue";
 import About from "../features/about/views/About.vue";
 import Contact from "../features/contact/views/Contact.vue";
 import Blog from "../features/blog/views/Blog.vue";
+import BlogDetails from "../features/blog/views/BlogDetails.vue";
+import Login from "../features/auth/views/Login.vue";
+import Register from "../features/auth/views/Register.vue";
+import OwnerProfile from "../features/owners/views/OwnerProfile.vue";
 import MainLayout from "../layouts/MainLayout.vue";
 import { i18n } from "../i18n";
+import ProfileClient from "../features/Clients/views/ProfileClient.vue";
 
 const routes = [
     {
         path: "/",
         redirect: "/ar"
+    },
+    {
+        path: "/:locale/login",
+        name: "login",
+        component: Login
+    },
+    {
+        path: "/:locale/register",
+        name: "register",
+        component: Register
+    },
+    {
+        path: "/:locale/auth",
+        redirect: (to: any) => `/${to.params.locale || 'ar'}/login`
     },
     {
         path: "/:locale",
@@ -33,6 +53,11 @@ const routes = [
                 component: ProductDetails
             },
             {
+                path: "compare",
+                name: "compareProperties",
+                component: CompareProperties
+            },
+            {
                 path: "about",
                 name: "about",
                 component: About
@@ -43,9 +68,28 @@ const routes = [
                 component: Blog
             },
             {
+                path: "blog/:id",
+                name: "blogDetails",
+                component: BlogDetails
+            },
+            {
                 path: "contact",
                 name: "contact",
                 component: Contact
+            },
+            {
+                path: "owners/:id",
+                name: "ownerProfile",
+                component: OwnerProfile
+            },
+            {
+                path: "client",
+                name: "clientProfile",
+                component: ProfileClient,
+                // meta: {
+                //     requiresAuth: true,
+                //     role: ['client']
+                // }
             }
         ]
     }

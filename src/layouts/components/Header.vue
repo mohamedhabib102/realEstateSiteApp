@@ -1,77 +1,145 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, computed } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { useRoute, useRouter } from 'vue-router'
-import { Search, User } from 'lucide-vue-next'
+import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
+import { Globe, Menu, User } from 'lucide-vue-next';
 
-const {  locale } = useI18n()
-const route = useRoute()
-const router = useRouter()
-const isScrolled = ref(false)
+const { t, locale } = useI18n();
+const route = useRoute();
+const router = useRouter();
+
+const isScrolled = ref(false);
+
+const emit = defineEmits<{
+    (e: 'open-drawer'): void;
+}>();
+
+const isHome = computed(() => {
+    return route.name === 'home' || route.path === '/' || route.path === `/${locale.value}` || route.path === `/${locale.value}/`;
+});
 
 const handleScroll = () => {
-    isScrolled.value = window.scrollY > 20
-}
+    let threshold = 140;
+    if (isHome.value) {
+        const heroEl = document.querySelector('.pin-spacer') || document.getElementById('hero');
+        if (heroEl) {
+            threshold = (heroEl as HTMLElement).offsetTop + (heroEl as HTMLElement).offsetHeight - 120;
+        } else {
+            threshold = window.innerHeight * 2.5;
+        }
+    }
+    isScrolled.value = window.scrollY > threshold;
+};
+
+watch(() => route.path, () => {
+    handleScroll();
+});
 
 onMounted(() => {
-    window.addEventListener('scroll', handleScroll)
-})
+    handleScroll();
+    window.addEventListener('scroll', handleScroll);
+});
 
 onUnmounted(() => {
-    window.removeEventListener('scroll', handleScroll)
-})
+    window.removeEventListener('scroll', handleScroll);
+});
 
 const toggleLanguage = () => {
-    const newLocale = locale.value === 'ar' ? 'en' : 'ar'
-    // Navigate to the same route but with new locale
-    const newPath = route.path.replace(`/${locale.value}`, `/${newLocale}`)
-    router.push(newPath)
-}
-
-const currentLanguageText = computed(() => locale.value === 'ar' ? 'English' : 'العربية')
+    const newLocale = locale.value === 'ar' ? 'en' : 'ar';
+    const currentPath = router.currentRoute.value.fullPath;
+    let newPath = currentPath;
+    
+    if (currentPath.startsWith(`/${locale.value}/`)) {
+        newPath = currentPath.replace(`/${locale.value}/`, `/${newLocale}/`);
+    } else if (currentPath === `/${locale.value}`) {
+        newPath = `/${newLocale}`;
+    } else {
+        newPath = `/${newLocale}${currentPath}`;
+    }
+    
+    router.push(newPath);
+};
 </script>
 
 <template>
     <header 
         class="fixed top-0 left-0 w-full z-50 transition-all duration-500 ease-out"
-        :class="isScrolled ? 'bg-surface/95 backdrop-blur-lg shadow-md py-4 border-b border-primary/10' : 'bg-transparent backdrop-blur-none shadow-none py-6 border-b border-transparent'"
+        :class="isScrolled ? 'bg-surface/90 backdrop-blur-xl shadow-md py-4' : 'bg-transparent py-6'"
     >
-        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+        <div class="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
             <!-- Logo -->
-            <div class="flex items-center gap-2">
-                <div class="w-8 h-8 bg-primary rounded-md flex items-center justify-center">
-                    <span class="text-surface font-bold text-xl leading-none">D</span>
+            <router-link :to="`/${locale}`" class="flex items-center gap-2.5 group cursor-pointer">
+                <div class="w-9 h-9 bg-primary text-white rounded-lg flex items-center justify-center shadow-md">
+                    <span class="font-bold text-xl leading-none">D</span>
                 </div>
-                <span class="text-2xl font-bold transition-colors" :class="isScrolled ? 'text-primary' : 'text-white'">Dwello</span>
-            </div>
+                <span 
+                    class="text-2xl font-bold tracking-widest uppercase transition-colors"
+                    :class="isScrolled ? 'text-primary' : 'text-white'"
+                >
+                    Dwello
+                </span>
+            </router-link>
 
-            <!-- Navigation -->
-            <nav class="hidden md:flex gap-8 items-center" :class="isScrolled ? 'text-text-main' : 'text-white/90'">
-                <router-link :to="`/${locale}/home`" class="font-semibold hover:text-primary transition-colors">{{ locale === 'ar' ? 'الرئيسية' : 'Home' }}</router-link>
-                <router-link :to="`/${locale}/products`" class="font-semibold hover:text-primary transition-colors">{{ locale === 'ar' ? 'المنتجات' : 'Products' }}</router-link>
-                <router-link :to="`/${locale}/about`" class="font-semibold hover:text-primary transition-colors">{{ locale === 'ar' ? 'عن الشركة' : 'About' }}</router-link>
-                <router-link :to="`/${locale}/contact`" class="font-semibold hover:text-primary transition-colors">{{ locale === 'ar' ? 'تواصل معنا' : 'Contact Us' }}</router-link>
+            <!-- Desktop Navigation Links -->
+            <nav 
+                class="hidden lg:flex items-center gap-8 font-semibold text-base transition-colors"
+                :class="isScrolled ? 'text-text-main' : 'text-white/90'"
+            >
+                <router-link :to="`/${locale}`" class="hover:text-primary transition-colors">
+                    {{ t('nav.home') }}
+                </router-link>
+                <router-link :to="`/${locale}/about`" class="hover:text-primary transition-colors">
+                    {{ t('nav.about') }}
+                </router-link>
+                <router-link :to="`/${locale}/products`" class="hover:text-primary transition-colors">
+                    {{ t('nav.products') }}
+                </router-link>
+                <router-link :to="`/${locale}/compare`" class="hover:text-primary transition-colors">
+                    {{ t('nav.compare') }}
+                </router-link>
+                <router-link :to="`/${locale}/blog`" class="hover:text-primary transition-colors">
+                    {{ t('nav.blog') }}
+                </router-link>
+                <router-link :to="`/${locale}/contact`" class="hover:text-primary transition-colors">
+                    {{ t('nav.contact') }}
+                </router-link>
             </nav>
 
-            <!-- Actions -->
-            <div class="flex items-center gap-4" :class="isScrolled ? 'text-text-main' : 'text-white'">
-                <button class="p-2 hover:text-primary transition-colors cursor-pointer">
-                    <Search class="w-5 h-5" />
-                </button>
-                <button class="p-2 hover:text-primary transition-colors cursor-pointer hidden sm:block">
-                    <User class="w-5 h-5" />
-                </button>
+            <!-- Action Controls (Language, Login, Mobile Toggle) -->
+            <div class="flex items-center gap-3 sm:gap-4">
+                <!-- Premium Login Button -->
+                <router-link 
+                    :to="`/${locale}/login`"
+                    class="hidden lg:flex items-center gap-2 px-5 py-2 rounded-full font-semibold text-xs sm:text-sm tracking-wide transition-all duration-300 shadow-md cursor-pointer hover:scale-105 active:scale-95"
+                    :class="isScrolled 
+                        ? 'bg-primary text-white hover:bg-primary/90 shadow-primary/20' 
+                        : 'bg-white/95 text-primary hover:bg-white backdrop-blur-md border border-white/50 shadow-black/10'"
+                >
+                    <User class="w-4 h-4 stroke-[2]" />
+                    <span>{{ t('nav.login') }}</span>
+                </router-link>
+
+                <!-- Language Toggle Button (Always Visible) -->
                 <button 
                     @click="toggleLanguage" 
-                    class="font-semibold text-sm px-3 py-1 border rounded-full transition-colors cursor-pointer"
-                    :class="isScrolled ? 'border-primary/20 text-primary hover:bg-primary/5' : 'border-white/30 text-white hover:bg-white/10'"
+                    class="flex items-center gap-2 px-3.5 py-1.5 rounded-full border transition-all cursor-pointer font-medium text-sm"
+                    :class="isScrolled ? 'border-primary/20 text-primary hover:bg-primary/5' : 'border-white/30 text-white hover:bg-white/10 backdrop-blur-sm'"
                 >
-                    {{ currentLanguageText }}
+                    <Globe class="w-4 h-4 stroke-[1.75]" />
+                    <span class="uppercase tracking-wider">
+                        <span class="lg:hidden">{{ locale === 'ar' ? 'EN' : 'عربي' }}</span>
+                        <span class="hidden lg:inline">{{ locale === 'ar' ? 'English' : 'العربية' }}</span>
+                    </span>
                 </button>
-                <button class="hidden sm:block px-6 py-2.5 rounded-md font-semibold transition-colors cursor-pointer"
-                    :class="isScrolled ? 'bg-text-main text-surface hover:bg-primary' : 'bg-white text-text-main hover:bg-gray-100'"
+
+                <!-- Mobile Menu Toggle Button (Visible on Mobile & Tablet < lg) -->
+                <button 
+                    @click="emit('open-drawer')"
+                    class="lg:hidden p-2 transition-colors cursor-pointer"
+                    :class="isScrolled ? 'text-text-main hover:text-primary' : 'text-white hover:text-gray-200'"
+                    aria-label="Toggle Navigation"
                 >
-                    {{ locale === 'ar' ? 'تسجيل' : 'Sign Up' }}
+                    <Menu class="w-8 h-8" stroke-width="1.75" />
                 </button>
             </div>
         </div>

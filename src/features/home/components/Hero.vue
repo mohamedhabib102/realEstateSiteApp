@@ -114,7 +114,7 @@ onUnmounted(() => {
 
 <template>
     <!-- Pin wrapper -->
-    <div ref="heroSection" class="relative w-full h-screen overflow-hidden bg-black">
+    <div ref="heroSection" class="relative w-full h-screen overflow-hidden bg-black" id="hero">
         
         <!-- Background Image with Overlay -->
         <div class="absolute inset-0 z-0">
@@ -144,57 +144,54 @@ onUnmounted(() => {
 
 
 
-        <div class="relative z-10 w-full h-full max-w-[90rem] mx-auto px-6 md:px-12">
+        <div class="relative z-10 w-full h-full max-w-[90rem] mx-auto px-6 sm:px-8 lg:px-12">
             <!-- Container for RTL/LTR Layout -->
-            <div class="flex h-full items-end md:items-center py-32 md:py-0 w-full justify-between">
+            <div class="flex flex-col lg:flex-row h-full justify-center lg:justify-between items-start lg:items-center pt-28 pb-10 lg:py-0 gap-6 lg:gap-0">
                 
                 <!-- Text Content -->
-                <div class="flex flex-col max-w-4xl relative w-full items-start text-start">
-                    <!-- Fixed height wrapper for text to prevent jumping -->
+                <div class="flex flex-col max-w-3xl lg:max-w-4xl relative w-full items-start text-start">
+                    <!-- Fixed height wrapper for text -->
                     <div 
-                        class="min-h-[280px] md:min-h-[220px] flex flex-col justify-center"
+                        class="min-h-[160px] sm:min-h-[200px] lg:min-h-[220px] flex flex-col justify-center"
                         v-motion
-                        :initial="{ opacity: 0, y: 50 }"
-                        :enter="{ opacity: 1, y: 0, transition: { duration: 1000, delay: 300 } }"
+                        :initial="{ opacity: 0, y: 30 }"
+                        :enter="{ opacity: 1, y: 0, transition: { duration: 800, delay: 200 } }"
                     >
                         <Transition name="fade-slide" mode="out-in">
-                            <div :key="currentIndex" class="flex flex-col gap-6 items-start">
+                            <div :key="currentIndex" class="flex flex-col gap-3 sm:gap-6 items-start">
                                 <h1 
-                                    class="text-4xl md:text-5xl lg:text-[4rem] text-white leading-[1.1] font-medium tracking-wide"
+                                    class="text-2xl sm:text-4xl lg:text-[3.8rem] text-white leading-[1.2] font-semibold tracking-wide"
                                     :class="locale === 'ar' ? 'font-cairo' : 'font-playfair'"
                                 >
                                     {{ slides[currentIndex].title1 }} <br />
                                     {{ slides[currentIndex].title2 }}
                                 </h1>
                                 
-                                <p class="text-xl md:text-2xl text-gray-200 leading-relaxed font-light max-w-xl whitespace-pre-line mt-2">
+                                <p class="text-sm sm:text-lg lg:text-xl text-gray-200 leading-relaxed font-light max-w-xl whitespace-pre-line">
                                     {{ slides[currentIndex].subtitle }}
                                 </p>
                             </div>
                         </Transition>
                     </div>
-
-                    <button class="mt-8 border border-white/40 px-10 py-3 text-white hover:bg-white/10 transition-colors text-lg font-medium tracking-wider w-max">
-                        {{ t('hero.contactUs') }}
-                    </button>
                 </div>
 
-                <!-- Pagination -->
-                <div class="hidden md:flex flex-col gap-6 mt-auto mb-20 shrink-0 items-end">
+                <!-- Pagination Steps -->
+                <div class="flex flex-col gap-3 sm:gap-6 mt-4 lg:mt-auto mb-4 lg:mb-20 shrink-0 items-start lg:items-end">
                     <div 
                         v-for="(n, i) in 3" 
                         :key="i"
-                        class="flex items-center gap-6 text-white cursor-pointer transition-all duration-300 flex-row"
+                        @click="currentIndex = i"
+                        class="flex items-center gap-4 sm:gap-6 text-white cursor-pointer transition-all duration-300 flex-row group"
                     >
                         <!-- Line -->
                         <div 
-                            class="h-[1px] bg-white transition-all duration-500" 
-                            :class="currentIndex === i ? 'w-16 opacity-100' : 'w-0 opacity-0'"
+                            class="h-[2px] bg-white transition-all duration-500 rounded-full" 
+                            :class="currentIndex === i ? 'w-10 sm:w-16 opacity-100' : 'w-0 opacity-0'"
                         ></div>
                         <!-- Number -->
                         <span 
-                            class="font-playfair tracking-widest transition-all duration-500" 
-                            :class="currentIndex === i ? 'text-2xl text-white' : 'text-xl text-gray-500'"
+                            class="tracking-widest transition-all duration-500 select-none" 
+                            :class="currentIndex === i ? 'text-xl sm:text-2xl text-white font-bold' : 'text-base sm:text-lg text-gray-400 group-hover:text-gray-200'"
                         >
                             0{{ n }}
                         </span>

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600&family=Outfit:wght@300;400;500&family=Playfair+Display:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700;900&display=swap');
 @import "tailwindcss";
 
 body {
@@ -31,10 +31,11 @@ body {
   color: var(--color-text-main);
 }
 
-/* Typography based on language direction */
-[dir="rtl"] {
-  font-family: 'Cairo', sans-serif;
+/* Strict Typography: Cairo for Arabic, Roboto for English */
+html[dir="rtl"], [dir="rtl"], [dir="rtl"] * {
+  font-family: 'Cairo', sans-serif !important;
 }
-[dir="ltr"] {
-  font-family: 'Outfit', sans-serif;
+
+html[dir="ltr"], [dir="ltr"], [dir="ltr"] * {
+  font-family: 'Roboto', sans-serif !important;
 }

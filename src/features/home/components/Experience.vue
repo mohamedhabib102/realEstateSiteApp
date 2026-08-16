@@ -1,7 +1,13 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 
 const { t, locale } = useI18n()
+const router = useRouter()
+
+const goToLogin = () => {
+    router.push(`/${locale.value}/login`)
+}
 </script>
 
 <template>
@@ -54,7 +60,10 @@ const { t, locale } = useI18n()
                         {{ t('experience.desc2') }}
                     </p>
 
-                    <button class="border border-black text-black px-10 py-4 font-semibold hover:bg-black hover:text-white transition-colors duration-300 w-max mt-4 text-lg">
+                    <button 
+                        @click="goToLogin"
+                        class="border border-black text-black px-10 py-4 font-semibold hover:bg-black hover:text-white transition-colors duration-300 w-max mt-4 text-lg cursor-pointer"
+                    >
                         {{ t('experience.contactUs') }}
                     </button>
                 </div>

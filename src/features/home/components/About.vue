@@ -1,7 +1,13 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 
 const { t, locale } = useI18n()
+const router = useRouter()
+
+const goToProducts = () => {
+    router.push(`/${locale.value}/products`)
+}
 </script>
 
 <template>
@@ -92,10 +98,11 @@ const { t, locale } = useI18n()
 
                     <!-- Button -->
                     <button 
+                        @click="goToProducts"
                         v-motion
                         :initial="{ opacity: 0, y: 30 }"
                         :visibleOnce="{ opacity: 1, y: 0, transition: { duration: 800, delay: 600 } }"
-                        class="mt-6 px-12 py-3.5 border-2 border-black text-black font-semibold text-lg hover:bg-black hover:text-white transition-colors duration-300"
+                        class="mt-6 px-12 py-3.5 border-2 border-black text-black font-semibold text-lg hover:bg-black hover:text-white transition-colors duration-300 cursor-pointer"
                     >
                         {{ t('about.contactUs') }}
                     </button>

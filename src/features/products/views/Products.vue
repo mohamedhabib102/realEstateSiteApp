@@ -20,9 +20,9 @@ const locations = computed(() => {
 
 const priceRanges = computed(() => {
     return [
-        { label: locale.value === 'ar' ? 'أقل من 50,000 ج.م' : 'Under 50K EGP', max: 50000 },
-        { label: locale.value === 'ar' ? '50,000 - 5 مليون ج.م' : '50K - 5M EGP', min: 50000, max: 5000000 },
-        { label: locale.value === 'ar' ? 'أكثر من 5 مليون ج.م' : 'Over 5M EGP', min: 5000000 }
+        { label: locale.value === 'ar' ? 'أقل من 2,000' : 'Under 2,000', max: 2000 },
+        { label: locale.value === 'ar' ? '2,000 - 4,000' : '2,000 - 4,000', min: 2000, max: 4000 },
+        { label: locale.value === 'ar' ? 'أكثر من 4,000' : 'Over 4,000', min: 4000 }
     ]
 })
 
