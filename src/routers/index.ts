@@ -12,7 +12,17 @@ import Register from "../features/auth/views/Register.vue";
 import OwnerProfile from "../features/owners/views/OwnerProfile.vue";
 import MainLayout from "../layouts/MainLayout.vue";
 import { i18n } from "../i18n";
-import ProfileClient from "../features/Clients/views/ProfileClient.vue";
+import DashboardLayout from "../features/dashboards/layouts/DashboardLayout.vue";
+import { roleConfig } from "../features/dashboards/roles";
+import { currentRole } from "../data/currentRole";
+
+// Build dashboard children ONLY for the active role.
+// The user never sees sections for roles they are not currently in.
+const dashboardChildren = roleConfig[currentRole].items.map((item) => ({
+    path: item.path,
+    name: item.name,
+    component: item.component,
+}));
 
 const routes = [
     {
@@ -32,6 +42,11 @@ const routes = [
     {
         path: "/:locale/auth",
         redirect: (to: any) => `/${to.params.locale || 'ar'}/login`
+    },
+    {
+        path: "/:locale/dashboards",
+        component: DashboardLayout,
+        children: dashboardChildren
     },
     {
         path: "/:locale",
@@ -81,15 +96,6 @@ const routes = [
                 path: "owners/:id",
                 name: "ownerProfile",
                 component: OwnerProfile
-            },
-            {
-                path: "client",
-                name: "clientProfile",
-                component: ProfileClient,
-                // meta: {
-                //     requiresAuth: true,
-                //     role: ['client']
-                // }
             }
         ]
     }
@@ -113,11 +119,11 @@ router.beforeEach((to, _from, next) => {
     if (locale && supportedLocales.includes(locale)) {
         // Update i18n locale
         i18n.global.locale.value = locale as any;
-        
+
         // Update HTML attributes for styling
         document.documentElement.lang = locale;
         document.documentElement.dir = locale === 'ar' ? 'rtl' : 'ltr';
-        
+
         // If the path has extra segments that don't match, redirect to the base locale
         if (to.matched.length === 0) {
             next(`/${locale}`);
@@ -128,7 +134,7 @@ router.beforeEach((to, _from, next) => {
         // Extract potential locale from path or default to 'ar'
         const pathSegments = to.path.split('/').filter(Boolean);
         const firstSegment = pathSegments[0];
-        
+
         if (supportedLocales.includes(firstSegment)) {
             // Valid locale but unmatched route, redirect to base of that locale
             next(`/${firstSegment}`);

@@ -168,7 +168,25 @@ const messages = {
         changePhone: 'Change Phone Number',
         dangerZone: 'Danger Zone',
         logoutAll: 'Logout from All Devices',
-        deleteAccount: 'Delete Account'
+        deleteAccount: 'Delete Account',
+        securityModal: {
+          currentPassword: 'Current Password',
+          newPassword: 'New Password',
+          confirmPassword: 'Confirm New Password',
+          newEmail: 'New Email Address',
+          newPhone: 'New Phone Number',
+          passwordMismatch: 'Passwords do not match',
+          cancel: 'Cancel',
+          save: 'Save',
+          update: 'Update',
+          changePasswordTitle: 'Change Password',
+          changeEmailTitle: 'Change Email Address',
+          changePhoneTitle: 'Change Phone Number',
+          deleteAccountTitle: 'Delete Account',
+          deleteAccountDesc: 'This will permanently delete your account and all your data. Please type your full name to confirm.',
+          typeNamePlaceholder: 'Type your full name to confirm',
+          nameMismatch: 'Name does not match'
+        }
     }
     ,
     aboutPage: {
@@ -377,7 +395,25 @@ const messages = {
         changePhone: 'تغيير رقم الهاتف',
         dangerZone: 'منطقة الخطر',
         logoutAll: 'تسجيل الخروج من جميع الأجهزة',
-        deleteAccount: 'حذف الحساب'
+        deleteAccount: 'حذف الحساب',
+        securityModal: {
+          currentPassword: 'كلمة المرور الحالية',
+          newPassword: 'كلمة المرور الجديدة',
+          confirmPassword: 'تأكيد كلمة المرور الجديدة',
+          newEmail: 'البريد الإلكتروني الجديد',
+          newPhone: 'رقم الهاتف الجديد',
+          passwordMismatch: 'كلمتا المرور غير متطابقتين',
+          cancel: 'إلغاء',
+          save: 'حفظ',
+          update: 'تحديث',
+          changePasswordTitle: 'تغيير كلمة المرور',
+          changeEmailTitle: 'تغيير البريد الإلكتروني',
+          changePhoneTitle: 'تغيير رقم الهاتف',
+          deleteAccountTitle: 'حذف الحساب',
+          deleteAccountDesc: 'سيتم حذف حسابك وجميع بياناتك نهائياً. اكتب اسمك الكامل لتأكيد الحذف.',
+          typeNamePlaceholder: 'اكتب اسمك الكامل للتأكيد',
+          nameMismatch: 'الاسم غير مطابق'
+        }
     },
     aboutPage: {
       heroTitle: 'تحويل المنازل وخلق\nمساحات الأحلام',

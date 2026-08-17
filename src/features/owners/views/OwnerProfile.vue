@@ -36,7 +36,6 @@ const owner = computed(() => ({
 
 const ownerListings = computed(() => products.slice(0, 3))
 
-const goBack = () => { router.back() }
 const activeTab = ref<'listings' | 'reviews'>('listings')
 
 const stats = computed(() => [
@@ -66,15 +65,6 @@ const mockReviews = [
         <section class="relative h-64 md:h-72 overflow-hidden">
             <img :src="owner.banner" alt="Banner" class="w-full h-full object-cover" />
             <div class="absolute inset-0 bg-gradient-to-b from-black/10 via-black/20 to-black/50"></div>
-            <button
-                @click="goBack"
-                class="absolute top-6 flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-md rounded-full text-white hover:bg-white/30 transition-all cursor-pointer z-10 text-sm font-medium"
-                :class="locale === 'ar' ? 'right-6 md:right-10' : 'left-6 md:left-10'"
-            >
-                <ArrowRight v-if="locale === 'ar'" class="w-4 h-4" />
-                <ArrowLeft v-else class="w-4 h-4" />
-                {{ locale === 'ar' ? 'رجوع' : 'Back' }}
-            </button>
         </section>
 
         <!-- Profile Card -->
