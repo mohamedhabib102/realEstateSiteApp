@@ -63,10 +63,10 @@ const goToProduct = (id: string) => router.push(`/${locale.value}/products/${id}
 const specRows = computed(() => [
     {
         key: 'price',
-        labelAr: 'السعر الشهري',
-        labelEn: 'Monthly Price',
-        renderA: () => `${propertyA.value?.price.toLocaleString(locale.value === 'ar' ? 'ar-EG' : 'en-US')} ${locale.value === 'ar' ? 'ج.م' : 'EGP'}`,
-        renderB: () => `${propertyB.value?.price.toLocaleString(locale.value === 'ar' ? 'ar-EG' : 'en-US')} ${locale.value === 'ar' ? 'ج.م' : 'EGP'}`,
+        labelAr: 'السعر',
+        labelEn: 'Price',
+        renderA: () => `${propertyA.value?.price.toLocaleString(locale.value === 'ar' ? 'ar-EG' : 'en-US')} ${locale.value === 'ar' ? 'ج.م' : 'EGP'}${propertyA.value && (propertyA.value.purpose ?? 'rent') === 'rent' && propertyA.value.priceTypeEn ? (locale.value === 'ar' ? ' / ' + propertyA.value.priceTypeAr : ' / ' + propertyA.value.priceTypeEn) : ''}`,
+        renderB: () => `${propertyB.value?.price.toLocaleString(locale.value === 'ar' ? 'ar-EG' : 'en-US')} ${locale.value === 'ar' ? 'ج.م' : 'EGP'}${propertyB.value && (propertyB.value.purpose ?? 'rent') === 'rent' && propertyB.value.priceTypeEn ? (locale.value === 'ar' ? ' / ' + propertyB.value.priceTypeAr : ' / ' + propertyB.value.priceTypeEn) : ''}`,
         highlightA: () => (propertyA.value?.price ?? 0) <= (propertyB.value?.price ?? 0),
         highlightB: () => (propertyB.value?.price ?? 0) <= (propertyA.value?.price ?? 0),
     },
@@ -223,7 +223,7 @@ const specRows = computed(() => [
                                     {{ locale === 'ar' ? propertyA.titleAr : propertyA.titleEn }}
                                 </div>
                                 <div class="text-primary font-black text-sm mt-0.5">
-                                    {{ propertyA.price.toLocaleString() }} {{ locale === 'ar' ? 'ج.م' : 'EGP' }}
+                                    {{ propertyA.price.toLocaleString() }} {{ locale === 'ar' ? 'ج.م' : 'EGP' }}<template v-if="(propertyA.purpose ?? 'rent') === 'rent' && propertyA.priceTypeEn"><span class="text-[10px] font-normal text-gray-400"> / {{ locale === 'ar' ? propertyA.priceTypeAr : propertyA.priceTypeEn }}</span></template>
                                 </div>
                             </div>
                         </div>
@@ -277,7 +277,7 @@ const specRows = computed(() => [
                                     {{ locale === 'ar' ? propertyB.titleAr : propertyB.titleEn }}
                                 </div>
                                 <div class="text-secondary font-black text-sm mt-0.5">
-                                    {{ propertyB.price.toLocaleString() }} {{ locale === 'ar' ? 'ج.م' : 'EGP' }}
+                                    {{ propertyB.price.toLocaleString() }} {{ locale === 'ar' ? 'ج.م' : 'EGP' }}<template v-if="(propertyB.purpose ?? 'rent') === 'rent' && propertyB.priceTypeEn"><span class="text-[10px] font-normal text-gray-400"> / {{ locale === 'ar' ? propertyB.priceTypeAr : propertyB.priceTypeEn }}</span></template>
                                 </div>
                             </div>
                         </div>

@@ -20,8 +20,20 @@ export interface DashboardItem {
     component: Component
 }
 
+export interface DashboardGroup {
+    /** Stable key used for expand/collapse state */
+    key: string
+    label: RoleLabel
+    /** lucide-vue-next icon component */
+    icon?: Component
+    items: DashboardItem[]
+}
+
 export interface RoleConfig {
     role: UserRole
     roleLabel: RoleLabel
+    /** When non-empty, the sidebar renders collapsible groups instead of a flat list */
+    groups: DashboardGroup[]
+    /** Flattened items used for routing (all items across groups) */
     items: DashboardItem[]
 }

@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-import { Search, Bell, Menu, ShieldCheck, ChevronDown, Settings, User, LogOut, Globe } from 'lucide-vue-next'
+import { Search, Bell, Menu, ShieldCheck, ChevronDown, Settings, User, LogOut, Globe, Heart } from 'lucide-vue-next'
 import { ownerInfo, notifications } from '../../../data/ownerDashboard'
+import { buyerInfo, buyerFavorites } from '../../../data/buyerDashboard'
+import { superAdminInfo } from '../../../data/superAdminDashboard'
 import { roleConfig } from '../roles'
 import { currentRole } from '../../../data/currentRole'
 
@@ -17,6 +19,15 @@ const notifOpen = ref(false)
 const profileOpen = ref(false)
 const unreadCount = notifications.filter((n) => n.unread).length
 const roleLabel = roleConfig[currentRole].roleLabel
+
+const isBuyer = computed(() => currentRole === 'buyer')
+
+// Role-aware profile info shown in the header
+const userInfo = computed(() => {
+    if (currentRole === 'buyer') return buyerInfo
+    if (currentRole === 'owner') return ownerInfo
+    return superAdminInfo
+})
 
 const toggleLanguage = () => {
     const newLocale = locale.value === 'ar' ? 'en' : 'ar'
@@ -53,6 +64,19 @@ const toggleLanguage = () => {
 
         <!-- Right: notifications + profile (profile pinned to far right) -->
         <div class="flex items-center gap-1.5 sm:gap-2 ms-auto">
+            <!-- Favorites shortcut (Buyer only) -->
+            <router-link
+                v-if="isBuyer"
+                :to="`/${locale}/dashboards/favorites`"
+                class="relative p-2.5 rounded-xl text-gray-600 hover:bg-gray-100 hover:text-primary transition-colors"
+                :title="locale === 'ar' ? 'المفضلة' : 'Favorites'"
+            >
+                <Heart class="w-5 h-5" />
+                <span class="absolute top-1 right-1 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                    {{ buyerFavorites.length }}
+                </span>
+            </router-link>
+
             <!-- Language switcher -->
             <button
                 @click="toggleLanguage"
@@ -111,9 +135,9 @@ const toggleLanguage = () => {
                     @click="profileOpen = !profileOpen"
                     class="flex items-center gap-2.5 p-1 ps-1.5 rounded-xl transition-all cursor-pointer border border-transparent hover:bg-gray-100 hover:border-gray-100"
                 >
-                    <img :src="ownerInfo.avatar" alt="" class="w-9 h-9 rounded-full object-cover ring-2 ring-primary/20" />
+                    <img :src="userInfo.avatar" alt="" class="w-9 h-9 rounded-full object-cover ring-2 ring-primary/20" />
                     <span class="hidden lg:block text-start leading-tight">
-                        <span class="block text-sm font-bold text-gray-900">{{ locale === 'ar' ? ownerInfo.nameAr : ownerInfo.nameEn }}</span>
+                        <span class="block text-sm font-bold text-gray-900">{{ locale === 'ar' ? (userInfo as any).nameAr : (userInfo as any).nameEn }}</span>
                         <span class="block text-[11px] font-semibold text-primary flex items-center gap-1">
                             <ShieldCheck class="w-3 h-3" />
                             {{ locale === 'ar' ? roleLabel.ar : roleLabel.en }}
@@ -130,10 +154,10 @@ const toggleLanguage = () => {
                         v-motion :enter="{ opacity: 1, scale: 1, transition: { duration: 200 } }"
                     >
                         <div class="flex items-center gap-3 p-4 bg-gray-50/60 border-b border-gray-100">
-                            <img :src="ownerInfo.avatar" alt="" class="w-10 h-10 rounded-full object-cover" />
+                            <img :src="userInfo.avatar" alt="" class="w-10 h-10 rounded-full object-cover" />
                             <div>
-                                <p class="text-sm font-bold text-gray-900">{{ locale === 'ar' ? ownerInfo.nameAr : ownerInfo.nameEn }}</p>
-                                <p class="text-xs text-gray-400 mt-0.5">{{ ownerInfo.email }}</p>
+                                <p class="text-sm font-bold text-gray-900">{{ locale === 'ar' ? (userInfo as any).nameAr : (userInfo as any).nameEn }}</p>
+                                <p class="text-xs text-gray-400 mt-0.5">{{ userInfo.email }}</p>
                             </div>
                         </div>
                         <div class="p-2">

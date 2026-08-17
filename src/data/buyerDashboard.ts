@@ -208,3 +208,6 @@ export const buyerAnalytics = {
     totalSpent: 15800,
     bookings: 6,
 }
+
+// Product ids the buyer has saved to their Favorites page.
+export const buyerFavorites: string[] = ['1', '3', '5', '7']

@@ -62,7 +62,7 @@ defineProps<{
                         {{ locale === 'ar' ? product.price.toLocaleString('ar-EG') : product.price.toLocaleString('en-US') }}
                     </span>
                     <span class="text-xs sm:text-sm font-medium text-gray-400">
-                        {{ locale === 'ar' ? 'ج.م' : 'EGP' }}
+                        {{ locale === 'ar' ? 'ج.م' : 'EGP' }}<template v-if="(product.purpose ?? 'rent') === 'rent' && product.priceTypeEn"> / {{ locale === 'ar' ? product.priceTypeAr : product.priceTypeEn }}</template>
                     </span>
                 </div>
 

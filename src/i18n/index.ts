@@ -227,7 +227,19 @@ const messages = {
       heroDesc: 'Discover a world filled with premier luxury homes, modern architecture, and exclusive real estate deals tailored just for you.',
       rememberMe: 'Remember me',
       forgotPassword: 'Forgot password?',
-      googleButton: 'Continue with Google'
+      googleButton: 'Continue with Google',
+      forgotTitle: 'Forgot Password?',
+      forgotSubtitle: 'No worries, enter your email below and we will send you a reset link.',
+      sendResetLink: 'Send Reset Link',
+      forgotNote: 'You will receive an email with instructions to reset your password in a few minutes. Check your inbox or spam folder.',
+      backToLogin: 'Back to Login',
+      verifyTitle: 'Verify Your Email',
+      verifySubtitle: 'We have sent a verification code to your email. Enter it below to verify your account.',
+      verificationCode: 'Verification Code',
+      verificationCodePlaceholder: 'Enter the 6-digit code',
+      verifyEmail: 'Verify Email',
+      didntReceive: "Didn't receive the code?",
+      resendCode: 'Resend Code'
     }
   },
   ar: {
@@ -453,7 +465,19 @@ const messages = {
       heroDesc: 'اكتشف عالماً مليئاً بأرقى العقارات الفاخرة، والتصاميم المعمارية الحديثة، والعروض الحصرية المصممة خصيصاً لراحتك وأسلوب حياتك.',
       rememberMe: 'تذكرني',
       forgotPassword: 'نسيت كلمة المرور؟',
-      googleButton: 'المتابعة باستخدام Google'
+      googleButton: 'المتابعة باستخدام Google',
+      forgotTitle: 'نسيت كلمة المرور؟',
+      forgotSubtitle: 'لا تقلق، أدخل بريدك الإلكتروني وسنرسل لك رابط إعادة التعيين.',
+      sendResetLink: 'إرسال رابط إعادة التعيين',
+      forgotNote: 'ستصلك رسالة بريد إلكتروني تتضمن تعليمات إعادة تعيين كلمة المرور خلال دقائق. تحقق من صندوق الوارد أو البريد غير المرغوب فيه.',
+      backToLogin: 'العودة لتسجيل الدخول',
+      verifyTitle: 'تحقق من بريدك الإلكتروني',
+      verifySubtitle: 'أرسلنا رمز التحقق إلى بريدك الإلكتروني. أدخل الرمز أدناه للتحقق من حسابك.',
+      verificationCode: 'رمز التحقق',
+      verificationCodePlaceholder: 'أدخل الرمز المكون من 6 أرقام',
+      verifyEmail: 'تأكيد البريد الإلكتروني',
+      didntReceive: 'لم يصلك الرمز؟',
+      resendCode: 'إعادة إرسال الرمز'
     }
   }
 }

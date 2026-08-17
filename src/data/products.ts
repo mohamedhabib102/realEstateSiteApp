@@ -14,7 +14,10 @@ export interface Product {
     titleAr: string;
     locationEn: string;
     locationAr: string;
+    categoryEn: string;
+    categoryAr: string;
     price: number;
+    purpose?: 'sale' | 'rent';
     imageMain?: string;
     images?: string[];
     priceTypeEn: string;
@@ -50,6 +53,8 @@ export const products: Product[] = [
         titleAr: 'شقة واسعة 4 غرف مع تراس رائع وإطلالة خلابة',
         locationEn: 'Trient, Italy TN',
         locationAr: 'ترينت، إيطاليا TN',
+        categoryEn: 'Apartment',
+        categoryAr: 'شقة',
         price: 2400,
         priceTypeEn: 'month',
         priceTypeAr: 'شهرياً',
@@ -84,6 +89,8 @@ export const products: Product[] = [
         titleAr: 'فيلا عصرية فاخرة مع حديقة خاصة ومسبح',
         locationEn: 'New Cairo, Egypt',
         locationAr: 'القاهرة الجديدة، مصر',
+        categoryEn: 'Villa',
+        categoryAr: 'فيلا',
         price: 3500,
         priceTypeEn: 'month',
         priceTypeAr: 'شهرياً',
@@ -118,6 +125,8 @@ export const products: Product[] = [
         titleAr: 'استوديو عصري أنيق بالقرب من المترو ووسط البلد',
         locationEn: 'Degla Maadi, Cairo',
         locationAr: 'دجلة المعادي، القاهرة',
+        categoryEn: 'Studio',
+        categoryAr: 'استوديو',
         price: 1200,
         priceTypeEn: 'month',
         priceTypeAr: 'شهرياً',
@@ -152,6 +161,8 @@ export const products: Product[] = [
         titleAr: 'شاليه ساحلي مودرن مع إطلالة بانورامية على البحر',
         locationEn: 'North Coast, Egypt',
         locationAr: 'الساحل الشمالي، مصر',
+        categoryEn: 'Chalet',
+        categoryAr: 'شاليه',
         price: 4800,
         priceTypeEn: 'month',
         priceTypeAr: 'شهرياً',
@@ -186,6 +197,8 @@ export const products: Product[] = [
         titleAr: 'شقة لوفت بتصميم معماري فريد وأسقف مرتفعة',
         locationEn: 'Sheikh Zayed, Giza',
         locationAr: 'الشيخ زايد، الجيزة',
+        categoryEn: 'Loft',
+        categoryAr: 'لوفت',
         price: 2100,
         priceTypeEn: 'month',
         priceTypeAr: 'شهرياً',
@@ -220,6 +233,8 @@ export const products: Product[] = [
         titleAr: 'شقة كلاسيكية فاخرة على الكورنيش بإطلالة مباشرة',
         locationEn: 'Corniche, Alexandria',
         locationAr: 'الكورنيش، الإسكندرية',
+        categoryEn: 'Apartment',
+        categoryAr: 'شقة',
         price: 1950,
         priceTypeEn: 'month',
         priceTypeAr: 'شهرياً',
@@ -254,6 +269,8 @@ export const products: Product[] = [
         titleAr: 'بنتهاوس سماوي بإطلالة 360 درجة وتراس واسع',
         locationEn: 'Zamalek, Cairo',
         locationAr: 'الزمالك، القاهرة',
+        categoryEn: 'Penthouse',
+        categoryAr: 'بنتهاوس',
         price: 5500,
         priceTypeEn: 'month',
         priceTypeAr: 'شهرياً',
@@ -288,6 +305,8 @@ export const products: Product[] = [
         titleAr: 'قصر ملكي متكامل مع مسبح خاص وحدائق واسعة',
         locationEn: 'King Mariout, Alexandria',
         locationAr: 'كينج مريوط، الإسكندرية',
+        categoryEn: 'Estate',
+        categoryAr: 'قصر',
         price: 7200,
         priceTypeEn: 'month',
         priceTypeAr: 'شهرياً',

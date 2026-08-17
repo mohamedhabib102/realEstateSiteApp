@@ -19,6 +19,8 @@ export interface BlogPost {
     descriptionEn: string
     descriptionAr: string
     list?: BlogPostListItem[]
+    /** Additional inline images shown inside the article */
+    additionalImages?: string[]
     date: string
     dateAr: string
     authorEn: string

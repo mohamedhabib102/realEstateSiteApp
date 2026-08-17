@@ -1,18 +1,23 @@
 <script setup lang="ts">
+import { toRef } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { X, Facebook, Instagram, Mail, User } from 'lucide-vue-next'
+import { useBodyScrollLock } from '../../composables/useBodyScrollLock'
 
 const { t, locale } = useI18n()
 const router = useRouter()
 
-defineProps<{
+const props = defineProps<{
     isOpen: boolean
 }>()
 
 const emit = defineEmits<{
     (e: 'close'): void
 }>()
+
+// Keep the page behind the drawer fixed while it is open.
+useBodyScrollLock(toRef(props, 'isOpen'))
 
 const navLinks = [
     { name: 'nav.home', href: '/' },
@@ -57,7 +62,7 @@ const navigateTo = (href: string) => {
                 </div>
 
                 <!-- Navigation Links -->
-                <nav class="flex-grow flex flex-col px-10 pt-4 gap-6 overflow-y-auto">
+                <nav data-lenis-prevent class="flex-grow flex flex-col px-10 pt-4 gap-6 overflow-y-auto overscroll-contain">
                     <a 
                         v-for="(link, index) in navLinks" 
                         :key="index"

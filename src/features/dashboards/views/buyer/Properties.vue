@@ -114,7 +114,7 @@ const showToast = (msg: string) => {
                         <span class="inline-flex items-center gap-1"><Maximize class="w-3.5 h-3.5" />{{ p.area }}m²</span>
                     </div>
                     <div class="mt-3 pt-3 border-t border-gray-100 flex items-center justify-between">
-                        <span class="text-primary font-bold text-sm">{{ p.price.toLocaleString() }} <span class="text-[11px] font-normal text-gray-400">{{ locale === 'ar' ? 'ج.م' : 'EGP' }} / {{ locale === 'ar' ? p.priceTypeAr : p.priceTypeEn }}</span></span>
+                        <span class="text-primary font-bold text-sm">{{ p.price.toLocaleString() }} <span class="text-[11px] font-normal text-gray-400">{{ locale === 'ar' ? 'ج.م' : 'EGP' }}<template v-if="(p.purpose ?? 'rent') === 'rent' && p.priceTypeEn"> / {{ locale === 'ar' ? p.priceTypeAr : p.priceTypeEn }}</template></span></span>
                     </div>
                     <button
                         @click="startConversation(p)"

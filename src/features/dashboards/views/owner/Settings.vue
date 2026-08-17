@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 import {
     User, Shield, Bell, Trash2, Camera, Key, LogOut,
-    Mail, Smartphone, Save
+    Mail, Smartphone, Save, BadgeCheck, ShieldAlert, ArrowRight
 } from 'lucide-vue-next'
 import BaseModal from '../../../../components/BaseModal.vue'
 import { ownerInfo } from '../../../../data/ownerDashboard'
+import { verificationState } from '../../../../data/verificationState'
 
 const { locale } = useI18n()
+const router = useRouter()
 
 const activeTab = ref('personal')
 const toast = ref('')
@@ -16,8 +19,12 @@ const toast = ref('')
 const tabs = [
     { key: 'personal', icon: User, labelEn: 'Personal Information', labelAr: 'المعلومات الشخصية' },
     { key: 'security', icon: Shield, labelEn: 'Security', labelAr: 'الأمان' },
+    { key: 'verification', icon: BadgeCheck, labelEn: 'Account Verification', labelAr: 'التحقق من الحساب' },
     { key: 'notifications', icon: Bell, labelEn: 'Notifications', labelAr: 'الإشعارات' },
 ]
+
+const verificationStatus = ref(verificationState.owner.status)
+const goToVerification = () => router.push(`/${locale.value}/dashboards/verification`)
 
 const notificationPrefs = [
     { key: 'newProperty', labelEn: 'New purchase requests', labelAr: 'طلبات الشراء الجديدة', val: true, tone: 'text-primary' },
@@ -148,6 +155,40 @@ const showToast = (msg: string) => {
                             </div>
                             <span class="px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-full text-[11px] font-bold">{{ locale === 'ar' ? 'مفعّل' : 'On' }}</span>
                         </button>
+                    </div>
+                </section>
+
+                <!-- Account Verification -->
+                <section v-if="activeTab === 'verification'" v-motion class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+                    <h3 class="text-lg font-bold text-gray-900 mb-5 flex items-center gap-2"><BadgeCheck class="w-5 h-5 text-primary" />{{ locale === 'ar' ? 'التحقق من الحساب' : 'Account Verification' }}</h3>
+
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-4 p-5 rounded-xl border border-gray-100 bg-gray-50/50">
+                        <div class="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0"
+                            :class="verificationStatus === 'approved' ? 'bg-emerald-50' : 'bg-amber-50'">
+                            <ShieldCheck class="w-6 h-6" :class="verificationStatus === 'approved' ? 'text-emerald-600' : 'text-amber-600'" />
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2">
+                                <span class="text-sm font-bold text-gray-900">{{ locale === 'ar' ? 'حالة التحقق' : 'Verification Status' }}</span>
+                                <span class="px-2.5 py-1 rounded-full text-[11px] font-bold"
+                                    :class="verificationStatus === 'approved' ? 'bg-emerald-50 text-emerald-700' : verificationStatus === 'pending' ? 'bg-amber-50 text-amber-700' : verificationStatus === 'rejected' ? 'bg-red-50 text-red-600' : 'bg-gray-100 text-gray-600'">
+                                    {{ verificationStatus === 'approved' ? (locale === 'ar' ? 'موثق' : 'Verified') : verificationStatus === 'pending' ? (locale === 'ar' ? 'قيد المراجعة' : 'Pending') : verificationStatus === 'rejected' ? (locale === 'ar' ? 'مرفوض' : 'Rejected') : (locale === 'ar' ? 'غير موثق' : 'Not Verified') }}
+                                </span>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1">
+                                {{ verificationStatus === 'approved' ? (locale === 'ar' ? 'تم توثيق هويتك بنجاح.' : 'Your identity has been verified.') : verificationStatus === 'pending' ? (locale === 'ar' ? 'طلبك قيد المراجعة من قبل المشرف.' : 'Your request is being reviewed by an admin.') : verificationStatus === 'rejected' ? (locale === 'ar' ? 'تم رفض طلبك، يرجى إعادة المحاولة ببيانات صحيحة.' : 'Your request was rejected, please retry with correct details.') : (locale === 'ar' ? 'وثّق حسابك لعرض هويتك الموثقة على ملفك الشخصي.' : 'Verify your account to display a verified badge on your profile.') }}
+                            </p>
+                        </div>
+                        <button
+                            v-if="verificationStatus !== 'approved'"
+                            @click="goToVerification"
+                            class="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors text-sm font-semibold cursor-pointer shrink-0">
+                            {{ verificationStatus === 'pending' ? (locale === 'ar' ? 'عرض الطلب' : 'View Request') : (locale === 'ar' ? 'تحقق الآن' : 'Verify Now') }}
+                            <ArrowRight class="w-4 h-4" :class="locale === 'ar' ? 'rotate-180' : ''" />
+                        </button>
+                        <span v-else class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-50 text-emerald-700 text-sm font-bold">
+                            <BadgeCheck class="w-4 h-4" />{{ locale === 'ar' ? 'تم التحقق' : 'Verified' }}
+                        </span>
                     </div>
                 </section>
 

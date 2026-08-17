@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 import {
     MapPin, Calendar, Mail, User, ShieldAlert, ShieldCheck, Key,
-    Smartphone, LogOut, Trash2, Camera, Edit2, CheckCircle2, AlertTriangle
+    Smartphone, LogOut, Trash2, Camera, Edit2, CheckCircle2, AlertTriangle, ArrowRight
 } from 'lucide-vue-next'
 import BaseModal from '../../../../components/BaseModal.vue'
 import { buyerInfo } from '../../../../data/buyerDashboard'
+import { verificationState } from '../../../../data/verificationState'
 
 const { locale, t } = useI18n()
+const router = useRouter()
 
 const buyer = computed(() => ({
     firstName: 'Sarah',
@@ -20,12 +23,14 @@ const buyer = computed(() => ({
     countryAr: 'مصر',
     cityEn: 'Cairo',
     cityAr: 'القاهرة',
-    isVerified: true,
+    isVerified: verificationState.buyer.status === 'approved',
     roleEn: 'Buyer',
     roleAr: 'مشتري',
 }))
 
 const buyerFullName = () => `${buyer.value.firstName} ${buyer.value.lastName}`
+
+const goToVerification = () => router.push(`/${locale.value}/dashboards/verification`)
 
 const activeModal = ref<'password' | 'email' | 'phone' | null>(null)
 const deleteOpen = ref(false)
@@ -154,6 +159,31 @@ const confirmDelete = () => {
 
             <!-- Security & danger (1 col) -->
             <div class="space-y-5">
+                <div v-motion :initial="{ opacity: 0, y: 16 }" :enter="{ opacity: 1, y: 0, transition: { duration: 500, delay: 220 } }" class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+                    <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2"><ShieldCheck class="w-5 h-5 text-primary" />{{ locale === 'ar' ? 'التحقق من الحساب' : 'Account Verification' }}</h3>
+                    <div class="flex items-center gap-3 p-3.5 rounded-xl border" :class="buyer.isVerified ? 'border-emerald-100 bg-emerald-50/40' : 'border-amber-100 bg-amber-50/40'">
+                        <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" :class="buyer.isVerified ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-600'">
+                            <ShieldCheck v-if="buyer.isVerified" class="w-5 h-5" />
+                            <ShieldAlert v-else class="w-5 h-5" />
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="text-sm font-bold" :class="buyer.isVerified ? 'text-emerald-700' : 'text-amber-700'">
+                                {{ buyer.isVerified ? (locale === 'ar' ? 'موثق' : 'Verified') : verificationState.buyer.status === 'pending' ? (locale === 'ar' ? 'قيد المراجعة' : 'Pending Review') : verificationState.buyer.status === 'rejected' ? (locale === 'ar' ? 'مرفوض' : 'Rejected') : (locale === 'ar' ? 'غير موثق' : 'Not Verified') }}
+                            </div>
+                            <div class="text-xs text-gray-500 mt-0.5">
+                                {{ buyer.isVerified ? (locale === 'ar' ? 'تم توثيق هويتك بنجاح' : 'Your identity has been verified') : (locale === 'ar' ? 'وثّق حسابك لعرض شارة موثقة' : 'Verify your account to get a verified badge') }}
+                            </div>
+                        </div>
+                        <button
+                            v-if="!buyer.isVerified"
+                            @click="goToVerification"
+                            class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-primary text-white hover:bg-primary/90 transition-colors text-xs font-bold cursor-pointer shrink-0">
+                            {{ verificationState.buyer.status === 'pending' ? (locale === 'ar' ? 'عرض' : 'View') : (locale === 'ar' ? 'تحقق' : 'Verify') }}
+                            <ArrowRight class="w-3.5 h-3.5" :class="locale === 'ar' ? 'rotate-180' : ''" />
+                        </button>
+                    </div>
+                </div>
+
                 <div v-motion :initial="{ opacity: 0, y: 16 }" :enter="{ opacity: 1, y: 0, transition: { duration: 500, delay: 220 } }" class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
                     <h3 class="text-lg font-bold text-gray-900 mb-4">{{ t('buyerProfile.security') }}</h3>
                     <div class="space-y-2">

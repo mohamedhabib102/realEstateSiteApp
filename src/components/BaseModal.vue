@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import { toRef } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { X } from 'lucide-vue-next'
+import { useBodyScrollLock } from '../composables/useBodyScrollLock'
 
-defineProps<{
+const props = defineProps<{
     open: boolean
     maxWidth?: string
 }>()
@@ -12,6 +14,9 @@ const emit = defineEmits<{
 }>()
 
 const { locale } = useI18n()
+
+// Keep the page behind the modal fixed while it is open.
+useBodyScrollLock(toRef(props, 'open'))
 </script>
 
 <template>
@@ -23,7 +28,8 @@ const { locale } = useI18n()
         <Transition name="modal">
             <div v-if="open" class="fixed inset-0 z-[201] flex items-center justify-center p-4 pointer-events-none">
                 <div
-                    class="bg-white rounded-2xl shadow-2xl w-full pointer-events-auto max-h-[90vh] overflow-y-auto"
+                    data-lenis-prevent
+                    class="bg-white rounded-2xl shadow-2xl w-full pointer-events-auto max-h-[90vh] overflow-y-auto overscroll-contain"
                     :style="{ maxWidth: maxWidth || '28rem' }"
                     v-motion :initial="{ opacity: 0, scale: 0.95, y: 12 }" :enter="{ opacity: 1, scale: 1, y: 0, transition: { duration: 220, ease: 'easeOut' } }"
                 >

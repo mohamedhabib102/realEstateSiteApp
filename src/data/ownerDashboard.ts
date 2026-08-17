@@ -31,8 +31,15 @@ export interface Property {
     locationAr: string
     price: number
     image: string
+    imageMain?: string
+    images?: string[]
     typeEn: string
     typeAr: string
+    purpose?: 'sale' | 'rent'
+    categoryEn?: string
+    categoryAr?: string
+    priceTypeEn?: string
+    priceTypeAr?: string
     bedrooms: number
     bathrooms: number
     area: number
@@ -40,6 +47,20 @@ export interface Property {
     views: number
     listedAt: string
     negotiable: boolean
+    rating?: number
+    descriptionEn?: string
+    descriptionAr?: string
+    featuresEn?: string[]
+    featuresAr?: string[]
+    bedTypeEn?: string
+    bedTypeAr?: string
+    capacityEn?: string
+    capacityAr?: string
+    bathTypeEn?: string
+    bathTypeAr?: string
+    videoUrl?: string
+    latitude?: number
+    longitude?: number
 }
 
 export const properties: Property[] = [
@@ -401,4 +422,106 @@ export const activityFeed: { id: string; icon: 'property' | 'payment' | 'message
     { id: '2', icon: 'payment', titleEn: 'Transaction TX-4806 completed', titleAr: 'اكتملت المعاملة TX-4806', time: '4h' },
     { id: '3', icon: 'message', titleEn: 'New message from Mohamed Hassan', titleAr: 'رسالة جديدة من محمد حسن', time: '6h' },
     { id: '4', icon: 'property', titleEn: 'Property #4 booked for viewing', titleAr: 'تم حجز معاينة للعقار رقم 4', time: '1d' },
+]
+
+export type MessageRequestStatus = 'pending' | 'accepted' | 'rejected'
+
+export interface MessageRequest {
+    id: string
+    buyerEn: string
+    buyerAr: string
+    buyerAvatar: string
+    buyerEmail: string
+    buyerPhone: string
+    buyerType: 'buyer' | 'renter'
+    propertyEn: string
+    propertyAr: string
+    propertyImage: string
+    messageEn: string
+    messageAr: string
+    date: string
+    status: MessageRequestStatus
+}
+
+export const messageRequests: MessageRequest[] = [
+    {
+        id: '1',
+        buyerEn: 'Sarah Johnson',
+        buyerAr: 'سارة جونسون',
+        buyerAvatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=100',
+        buyerEmail: 'sarah.johnson@example.com',
+        buyerPhone: '+20 100 555 1234',
+        buyerType: 'renter',
+        propertyEn: 'Large 4-room apartment with a beautiful terrace',
+        propertyAr: 'شقة واسعة 4 غرف مع تراس رائع',
+        propertyImage: product1,
+        messageEn: 'Hello, I am interested in renting this apartment for a year. Is it still available?',
+        messageAr: 'مرحباً، أنا مهتم باستئجار هذه الشقة لمدة عام. هل ما زالت متاحة؟',
+        date: '2026-08-17',
+        status: 'pending',
+    },
+    {
+        id: '2',
+        buyerEn: 'Mohamed Hassan',
+        buyerAr: 'محمد حسن',
+        buyerAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100',
+        buyerEmail: 'mohamed.hassan@example.com',
+        buyerPhone: '+20 100 555 8765',
+        buyerType: 'buyer',
+        propertyEn: 'Luxury Modern Villa with Private Garden',
+        propertyAr: 'فيلا عصرية فاخرة مع حديقة خاصة',
+        propertyImage: product3,
+        messageEn: 'I would like to schedule a viewing for the villa this weekend.',
+        messageAr: 'أود حجز موعد معاينة للفيلا هذا الأسبوع.',
+        date: '2026-08-16',
+        status: 'pending',
+    },
+    {
+        id: '3',
+        buyerEn: 'Layla Ibrahim',
+        buyerAr: 'ليلى إبراهيم',
+        buyerAvatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=100',
+        buyerEmail: 'layla.ibrahim@example.com',
+        buyerPhone: '+20 100 555 9988',
+        buyerType: 'renter',
+        propertyEn: 'Cozy Modern Studio near Metro & Downtown',
+        propertyAr: 'استوديو عصري أنيق بالقرب من المترو',
+        propertyImage: product2,
+        messageEn: 'Hi, is the studio available next month? What utilities are included?',
+        messageAr: 'مرحباً، هل الاستوديو متاح الشهر القادم؟ وما هي المرافق المشمولة؟',
+        date: '2026-08-15',
+        status: 'accepted',
+    },
+    {
+        id: '4',
+        buyerEn: 'Omar Farouk',
+        buyerAr: 'عمر فاروق',
+        buyerAvatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=100',
+        buyerEmail: 'omar.farouk@example.com',
+        buyerPhone: '+20 100 555 4411',
+        buyerType: 'buyer',
+        propertyEn: 'Urban Designer Loft with Double-Height Ceilings',
+        propertyAr: 'لوفت بتصميم معماري فريد وأسقف مرتفعة',
+        propertyImage: product1,
+        messageEn: 'Can we negotiate the price? I am a serious buyer ready to close quickly.',
+        messageAr: 'هل يمكننا التفاوض على السعر؟ أنا مشترٍ جاد ومستعد لإتمام الصفقة سريعاً.',
+        date: '2026-08-14',
+        status: 'rejected',
+    },
+    {
+        id: '5',
+        buyerEn: 'Mona Reda',
+        buyerAr: 'منى رضا',
+        buyerAvatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=100',
+        buyerEmail: 'mona.reda@example.com',
+        buyerPhone: '+20 100 555 7766',
+        buyerType: 'renter',
+        propertyEn: 'Waterfront Modern Chalet with Panoramic Sea View',
+        propertyAr: 'شاليه ساحلي مودرن مع إطلالة بحرية',
+        propertyImage: product4,
+        messageEn: 'Is the chalet available for the summer season?',
+        messageAr: 'هل الشاليه متاح لموسم الصيف؟',
+        date: '2026-08-12',
+        status: 'pending',
+    },
 ]

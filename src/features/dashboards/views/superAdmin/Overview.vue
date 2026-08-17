@@ -4,8 +4,7 @@ import { useI18n } from 'vue-i18n'
 import {
     Users, Building2, DollarSign, Hourglass, MessagesSquare, TrendingUp, ArrowUpRight
 } from 'lucide-vue-next'
-import { saAnalytics, superAdminInfo } from '../../../../data/superAdminDashboard'
-import { purchaseTransactions, conversations } from '../../../../data/ownerDashboard'
+import { saAnalytics, superAdminInfo, platformTransactions, platformConversations } from '../../../../data/superAdminDashboard'
 import RevenueChart from '../../components/RevenueChart.vue'
 
 const { locale } = useI18n()
@@ -18,8 +17,8 @@ const statCards = computed(() => [
 ])
 
 const pendingCount = saAnalytics.pendingApprovals
-const recentTxns = computed(() => purchaseTransactions.slice(0, 5))
-const recentChats = computed(() => conversations.slice(0, 5))
+const recentTxns = computed(() => platformTransactions.slice(0, 5))
+const recentChats = computed(() => platformConversations.slice(0, 5))
 
 const txnStatus: Record<string, { en: string; ar: string; cls: string }> = {
     completed: { en: 'Completed', ar: 'مكتمل', cls: 'bg-emerald-50 text-emerald-700' },
@@ -104,9 +103,12 @@ const greeting = computed(() => {
                 </div>
                 <div class="divide-y divide-gray-50">
                     <div v-for="txn in recentTxns" :key="txn.id" class="flex items-center gap-3 py-3">
-                        <img :src="txn.avatar" alt="" class="w-9 h-9 rounded-full object-cover" />
+                        <div class="relative shrink-0">
+                            <img :src="txn.buyerAvatar" alt="" class="w-9 h-9 rounded-full object-cover" />
+                            <img :src="txn.ownerAvatar" alt="" class="w-5 h-5 rounded-full object-cover absolute -bottom-1 -right-1 ring-2 ring-white" />
+                        </div>
                         <div class="flex-1 min-w-0">
-                            <div class="text-sm font-semibold text-gray-800 truncate">{{ locale === 'ar' ? txn.buyerAr : txn.buyerEn }}</div>
+                            <div class="text-sm font-semibold text-gray-800 truncate">{{ locale === 'ar' ? txn.buyerAr : txn.buyerEn }} <span class="text-gray-300 font-normal mx-0.5">↔</span> {{ locale === 'ar' ? txn.ownerAr : txn.ownerEn }}</div>
                             <div class="text-[11px] text-gray-400 truncate">{{ locale === 'ar' ? txn.propertyAr : txn.propertyEn }} · {{ txn.id }}</div>
                         </div>
                         <div class="text-right shrink-0">
@@ -128,17 +130,17 @@ const greeting = computed(() => {
                 <div class="divide-y divide-gray-50">
                     <div v-for="c in recentChats" :key="c.id" class="flex items-center gap-3 py-3">
                         <div class="relative shrink-0">
-                            <img :src="c.avatar" alt="" class="w-10 h-10 rounded-full object-cover" />
-                            <span v-if="c.online" class="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 rounded-full ring-2 ring-white"></span>
+                            <img :src="c.buyerAvatar" alt="" class="w-9 h-9 rounded-full object-cover" />
+                            <img :src="c.ownerAvatar" alt="" class="w-5 h-5 rounded-full object-cover absolute -bottom-1 -right-1 ring-2 ring-white" />
+                            <span v-if="c.buyerOnline || c.ownerOnline" class="absolute -top-0.5 -left-0.5 w-3 h-3 bg-emerald-500 rounded-full ring-2 ring-white"></span>
                         </div>
                         <div class="flex-1 min-w-0">
                             <div class="flex items-center justify-between">
-                                <span class="text-sm font-semibold text-gray-800">{{ locale === 'ar' ? c.clientAr : c.clientEn }}</span>
-                                <span class="text-[11px] text-gray-400">{{ c.time }}</span>
+                                <span class="text-sm font-semibold text-gray-800 truncate">{{ locale === 'ar' ? c.buyerAr : c.buyerEn }} <span class="text-gray-300 font-normal mx-0.5">↔</span> {{ locale === 'ar' ? c.ownerAr : c.ownerEn }}</span>
+                                <span class="text-[11px] text-gray-400 shrink-0 ms-2">{{ c.time }}</span>
                             </div>
                             <div class="flex items-center justify-between mt-0.5">
                                 <span class="text-xs text-gray-500 truncate">{{ locale === 'ar' ? c.lastMessageAr : c.lastMessageEn }}</span>
-                                <span v-if="c.unread" class="w-4 h-4 bg-secondary text-white text-[10px] font-bold rounded-full flex items-center justify-center shrink-0 ms-2">{{ c.unread }}</span>
                             </div>
                         </div>
                     </div>

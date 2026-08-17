@@ -3,6 +3,7 @@ import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { products } from '../../../data/products'
+import { useBodyScrollLock } from '../../../composables/useBodyScrollLock'
 import { 
     MapPin, Star, Bed, Bath, Square, ArrowLeft, ArrowRight, CheckCircle2, 
     BadgeCheck, BadgeX, Phone, Video, Play, X, ZoomIn, Eye, Maximize2, Scale 
@@ -83,6 +84,10 @@ const openImageModal = (img?: string) => {
 const closeImageModal = () => {
     isImageModalOpen.value = false
 }
+
+// Keep the page behind fixed while the lightbox / video modals are open.
+useBodyScrollLock(isImageModalOpen)
+useBodyScrollLock(isVideoModalOpen)
 
 const nextModalImage = () => {
     if (!product.value?.images || !product.value.images.length) return
@@ -219,7 +224,7 @@ const goToCompare = () => {
                             <div class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">{{ t('products.priceType') }}</div>
                             <div class="text-2xl sm:text-3xl font-black text-primary mb-4">
                                 {{ locale === 'ar' ? product.price.toLocaleString('ar-EG') : product.price.toLocaleString('en-US') }}
-                                <span class="text-sm font-bold text-gray-700">{{ locale === 'ar' ? 'ج.م' : 'EGP' }}</span>
+                                <span class="text-sm font-bold text-gray-700">{{ locale === 'ar' ? 'ج.م' : 'EGP' }}<template v-if="(product.purpose ?? 'rent') === 'rent' && product.priceTypeEn"> / {{ locale === 'ar' ? product.priceTypeAr : product.priceTypeEn }}</template></span>
                             </div>
 
                             <div class="space-y-2.5">
@@ -536,7 +541,7 @@ const goToCompare = () => {
                     </div>
 
                     <!-- Bottom Modal Thumbnails Strip -->
-                    <div v-if="product.images && product.images.length" class="w-full max-w-2xl flex items-center justify-center gap-2 sm:gap-3 overflow-x-auto py-2 z-10 scrollbar-none">
+                    <div data-lenis-prevent v-if="product.images && product.images.length" class="w-full max-w-2xl flex items-center justify-center gap-2 sm:gap-3 overflow-x-auto py-2 z-10 scrollbar-none">
                         <button
                             v-for="(img, idx) in product.images"
                             :key="idx"

@@ -2,15 +2,13 @@
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import {
-    Inbox, MapPin, Check, X, MessageCircle, CheckCircle2,
-    XCircle, Clock, ArrowUpRight
+    Inbox, MapPin, MessageCircle, CheckCircle2, ArrowUpRight, Clock
 } from 'lucide-vue-next'
 import { chatRequests, type ChatRequestStatus } from '../../../../data/buyerDashboard'
 
 const { locale } = useI18n()
 
 const tab = ref<ChatRequestStatus | 'all'>('all')
-const toast = ref('')
 
 const tabs = [
     { key: 'all' as const, labelEn: 'All', labelAr: 'الكل' },
@@ -29,21 +27,6 @@ const statusMeta: Record<ChatRequestStatus, { en: string; ar: string; cls: strin
     accepted: { en: 'Accepted', ar: 'مقبولة', cls: 'bg-emerald-50 text-emerald-700', dot: 'bg-emerald-500' },
     rejected: { en: 'Rejected', ar: 'مرفوضة', cls: 'bg-gray-100 text-gray-600', dot: 'bg-gray-400' },
 }
-
-const setStatus = (id: string, s: ChatRequestStatus) => {
-    const idx = list.value.findIndex((r) => r.id === id)
-    if (idx === -1) return
-    list.value[idx] = { ...list.value[idx], status: s }
-    const msg = locale.value === 'ar'
-        ? (s === 'accepted' ? 'تم قبول طلب المحادثة' : 'تم رفض طلب المحادثة')
-        : (s === 'accepted' ? 'Chat request accepted' : 'Chat request rejected')
-    showToast(msg)
-}
-
-const showToast = (msg: string) => {
-    toast.value = msg
-    setTimeout(() => (toast.value = ''), 3000)
-}
 </script>
 
 <template>
@@ -51,7 +34,7 @@ const showToast = (msg: string) => {
         <!-- Header -->
         <div v-motion :initial="{ opacity: 0, y: 12 }" :enter="{ opacity: 1, y: 0, transition: { duration: 400 } }">
             <h1 class="text-2xl font-bold text-gray-900">{{ locale === 'ar' ? 'طلبات المحادثة' : 'Chat Requests' }}</h1>
-            <p class="text-sm text-gray-500 mt-1">{{ locale === 'ar' ? 'إدارة طلبات المحادثة الواردة من الملاك' : 'Manage incoming chat requests from owners' }}</p>
+            <p class="text-sm text-gray-500 mt-1">{{ locale === 'ar' ? 'متابعة طلبات المحادثة المرسلة إلى الملاك' : 'Track the chat requests you sent to owners' }}</p>
         </div>
 
         <!-- Tabs -->
@@ -94,19 +77,25 @@ const showToast = (msg: string) => {
                 </div>
 
                 <div class="flex items-center gap-2 shrink-0">
-                    <span class="text-[11px] text-gray-400 me-auto sm:me-0">{{ r.time }}</span>
-                    <template v-if="r.status === 'pending'">
-                        <button @click="setStatus(r.id, 'accepted')" class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-emerald-500 text-white rounded-xl hover:bg-emerald-600 transition-colors text-xs font-bold cursor-pointer">
-                            <Check class="w-3.5 h-3.5" /> {{ locale === 'ar' ? 'قبول' : 'Accept' }}
-                        </button>
-                        <button @click="setStatus(r.id, 'rejected')" class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-gray-100 text-gray-600 rounded-xl hover:bg-gray-200 transition-colors text-xs font-bold cursor-pointer">
-                            <X class="w-3.5 h-3.5" /> {{ locale === 'ar' ? 'رفض' : 'Decline' }}
-                        </button>
+                    <span class="inline-flex items-center gap-1 text-[11px] text-gray-400 me-auto sm:me-0"><Clock class="w-3 h-3" />{{ r.time }}</span>
+                    <template v-if="r.status === 'accepted'">
+                        <router-link
+                            :to="`/${locale}/dashboards/messages`"
+                            class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors text-xs font-bold"
+                        >
+                            <MessageCircle class="w-3.5 h-3.5" /> {{ locale === 'ar' ? 'متابعة المحادثة' : 'Continue Conversation' }}
+                            <ArrowUpRight class="w-3.5 h-3.5" />
+                        </router-link>
                     </template>
-                    <template v-else-if="r.status === 'accepted'">
-                        <button class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors text-xs font-bold cursor-pointer">
-                            <MessageCircle class="w-3.5 h-3.5" /> {{ locale === 'ar' ? 'محادثة' : 'Message' }}
-                        </button>
+                    <template v-else-if="r.status === 'pending'">
+                        <span class="text-[11px] font-semibold text-amber-600 bg-amber-50 px-3 py-2 rounded-xl">
+                            {{ locale === 'ar' ? 'بانتظار رد المالك' : 'Awaiting owner response' }}
+                        </span>
+                    </template>
+                    <template v-else>
+                        <span class="text-[11px] font-semibold text-gray-400 bg-gray-50 px-3 py-2 rounded-xl">
+                            {{ locale === 'ar' ? 'تم رفض الطلب' : 'Request declined' }}
+                        </span>
                     </template>
                 </div>
             </div>
@@ -116,13 +105,6 @@ const showToast = (msg: string) => {
                 <p class="font-medium">{{ locale === 'ar' ? 'لا توجد طلبات' : 'No requests yet' }}</p>
             </div>
         </div>
-
-        <!-- Toast -->
-        <Transition name="toast">
-            <div v-if="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[300] px-5 py-3 bg-gray-900 text-white rounded-xl shadow-2xl text-sm font-semibold flex items-center gap-2">
-                <CheckCircle2 class="w-4 h-4 text-emerald-400 shrink-0" /> {{ toast }}
-            </div>
-        </Transition>
     </div>
 </template>
 
@@ -132,14 +114,5 @@ const showToast = (msg: string) => {
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
-}
-.toast-enter-active,
-.toast-leave-active {
-    transition: opacity 0.3s ease, transform 0.3s ease;
-}
-.toast-enter-from,
-.toast-leave-to {
-    opacity: 0;
-    transform: translate(-50%, 10px);
 }
 </style>

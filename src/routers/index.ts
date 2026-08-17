@@ -9,6 +9,8 @@ import Blog from "../features/blog/views/Blog.vue";
 import BlogDetails from "../features/blog/views/BlogDetails.vue";
 import Login from "../features/auth/views/Login.vue";
 import Register from "../features/auth/views/Register.vue";
+import ForgotPassword from "../features/auth/views/ForgotPassword.vue";
+import EmailVerification from "../features/auth/views/EmailVerification.vue";
 import OwnerProfile from "../features/owners/views/OwnerProfile.vue";
 import MainLayout from "../layouts/MainLayout.vue";
 import { i18n } from "../i18n";
@@ -38,6 +40,16 @@ const routes = [
         path: "/:locale/register",
         name: "register",
         component: Register
+    },
+    {
+        path: "/:locale/forgot-password",
+        name: "forgot-password",
+        component: ForgotPassword
+    },
+    {
+        path: "/:locale/verify-email",
+        name: "verify-email",
+        component: EmailVerification
     },
     {
         path: "/:locale/auth",

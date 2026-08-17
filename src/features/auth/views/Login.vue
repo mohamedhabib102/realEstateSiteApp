@@ -158,7 +158,7 @@ const goToHome = () => {
                                 <label class="block text-xs font-semibold text-gray-800">
                                     {{ t('auth.password') }}
                                 </label>
-                                <a href="#" class="text-xs text-primary hover:underline font-medium">
+                                <a @click.prevent="router.push(`/${locale}/forgot-password`)" href="#" class="text-xs text-primary hover:underline font-medium">
                                     {{ t('auth.forgotPassword') }}
                                 </a>
                             </div>
